@@ -7,7 +7,12 @@ import os
 import sys
 import time
 from datetime import timedelta
+from sklearn.model_selection import learning_curve
+from sklearn.model_selection import ShuffleSplit
+import matplotlib as plt
 
+
+from yibai_code import Participle
 import numpy as np
 import tensorflow as tf
 from sklearn import metrics
@@ -15,14 +20,40 @@ from sklearn import metrics
 from cnn_model import TCNNConfig, TextCNN
 from data.cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
 
-base_dir = 'data/cnews'
-train_dir = os.path.join(base_dir, 'cnews.train.txt')
-test_dir = os.path.join(base_dir, 'cnews.test.txt')
-val_dir = os.path.join(base_dir, 'cnews.val.txt')
+base_dir = 'data\\cnews'
+train_dir = 'cnews.train.txt'
+test_dir = 'cnews.test.txt'
+val_dir = 'cnews.val.txt'
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 
 save_dir = 'checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保存路径
+
+
+# def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=1, train_sizes=np.linspace(0.1, 1.0, 5)):
+#     plt.title(title)  # 图像标题
+#     if ylim is not None:  # y轴限制不为空时
+#         plt.ylim(*ylim)
+#     plt.xlabel("Training examples")  # 两个标题
+#     plt.ylabel("Score")
+#     train_sizes, train_scores, test_scores = learning_curve(estimator, X, y, cv=cv, n_jobs=n_jobs,
+#                                                             train_sizes=train_sizes)  # 获取训练集大小，训练得分集合，测试得分集合
+#     train_scores_mean = np.mean(train_scores, axis=1)  # 将训练得分集合按行的到平均值
+#     train_scores_std = np.std(train_scores, axis=1)  # 计算训练矩阵的标准方差
+#     test_scores_mean = np.mean(test_scores, axis=1)
+#     test_scores_std = np.std(test_scores, axis=1)
+#     plt.grid()  # 背景设置为网格线
+#
+#     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, alpha=0.1,
+#                      color='r')
+#     # plt.fill_between()函数会把模型准确性的平均值的上下方差的空间里用颜色填充。
+#     plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=0.1,
+#                      color='g')
+#     plt.plot(train_sizes, train_scores_mean, 'o-', color='r', label='Training score')
+#     # 然后用plt.plot()函数画出模型准确性的平均值
+#     plt.plot(train_sizes, test_scores_mean, 'o-', color='g', label='Cross_validation score')
+#     plt.legend(loc='best')  # 显示图例
+#     return plt
 
 
 def get_time_dif(start_time):
